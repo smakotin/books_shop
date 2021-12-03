@@ -1,7 +1,6 @@
 from django.core import validators
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import OuterRef
 
 
 class Book(models.Model):
@@ -17,17 +16,6 @@ class Book(models.Model):
     rate = models.ManyToManyField(User, related_name="rated_books", through="myapp.RateBookUser")
     order = models.ManyToManyField(User, related_name="ordered_books", through="myapp.OrderBookUser")
     price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="цена", validators=[validators.MinValueValidator(0)])
-
-    def get_rate(self):
-        arr = list(RateBookUser.objects.filter(book=self).values_list("rate", flat=True))
-        if arr:
-            return sum(arr) / len(arr)
-
-    def get_total_order(self):
-        arr = list(OrderBookUser.objects.filter(book=self).values_list("count", flat=True))
-        if arr:
-            return sum(arr)
-        return 0
 
     def __str__(self):
         return self.title
@@ -48,5 +36,5 @@ class RateBookUser(models.Model):
 class OrderBookUser(models.Model):
     count = models.PositiveIntegerField(default=1)
     date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="order_book_user_user")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="order_book_user_book")

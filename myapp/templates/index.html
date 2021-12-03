@@ -16,11 +16,11 @@
     <h4>{{ book.text }}</h4>
     <h3>Price is {{book.price}}</h3>
     <h3>Rate</h3>
-    {{ book.get_rate }}
+    {{ book.avg_rate }}
     {% for i in '12345' %}
         <a href="{% url 'add-rate' rate=i book_id=book.id %}">rate {{i}}</a>
     {% endfor %}
-    <h3>Total order is {{ book.get_total_order }}</h3>
+    <h3>Total order is {{ book.total_order }}</h3>
     <form action="{% url 'order-book' book_id=book.id %}" method="post">
         {% csrf_token %}
         <label for="count">Count</label>

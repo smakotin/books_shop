@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
 from myapp.models import Book, RateBookUser, OrderBookUser
+from django.db.models import Avg, Sum
 
 
 def hello(request):
-    return render(request, "index.html", {"books": Book.objects.all()})
+    query = Book.objects.annotate(
+        avg_rate=Avg("rate_book_user_book__rate"),
+        total_order=Sum("order_book_user_book__count")
+    ).prefetch_related("authors")
+    return render(request, "index.html", {"books": query})
 
 
 def add_rate(request, rate, book_id):
