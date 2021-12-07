@@ -5,6 +5,13 @@
     <title>Title</title>
 </head>
 <body>
+{{user}}<br>
+{% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">logout</a>
+{% else %}
+    <a href="{% url 'login' %}">login</a>
+{% endif %}<br>
+<a href="{% url 'my-account' %}">my Account</a><br>
 {% for book in books %}
     {{ book.title }}<br>
     <h3>Author:</h3>
@@ -34,8 +41,24 @@
         {{ comment.user }}
         {{ comment.text }}
         {{ comment.likes }}
+        {% if comment.user == user %}
+            <form action="{% url 'delete-comment' comment_id=comment.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="delete">
+            </form>
+            <form action="{% url 'update-comment' comment_id=comment.id %}" method="get">
+                {% csrf_token %}
+                <input type="submit" value="update">
+            </form>
+        {% endif %}
         <br>
     {% endfor %}
+    <form action="{% url 'add-comment' book_id=book.id %}" method="post">
+        {% csrf_token %}
+        <label for="comment">Comment</label>
+        <textarea type="text" name="comment" id="comment" rows="5" cols="15"></textarea>
+        <input type="submit" value="OK">
+    </form>
     <hr>
 {% endfor %}
 </body>

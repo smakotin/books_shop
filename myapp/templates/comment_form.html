@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form action="{% url 'update-comment' comment_id=comment.id %}" method="post">
+      <label for="comment">Comment</label>
+      {% csrf_token %}
+      <textarea type="text" name="comment" id="comment" rows="5" cols="15" >{{ comment.text }}</textarea>
+      <input type="submit" value="OK">
+  </form>
+</body>
+</html>
