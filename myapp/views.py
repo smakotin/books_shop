@@ -1,3 +1,4 @@
+
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -62,6 +63,15 @@ def update_comment(request, comment_id):
     return redirect("main-page")
 
 
+# @login_required(login_url="login")
+# def like_comment(request, comment_id):
+#     comment_query = Comment.objects.filter(id=comment_id)
+#     if comment_query.exists():
+#         return render(request, "comment_form.html", {"comment": comment_query.first()})
+#     return redirect("main-page")
+
+
+
 @login_required(login_url="login")
 def my_account(request):
     ordered_book_query_set = OrderBookUser.objects.filter(user_id=request.user.id).select_related("book").order_by("book__title")
@@ -88,4 +98,25 @@ def login_view(request):
             login(request, user)
         else:
             return redirect("login")
+    return redirect("main-page")
+
+
+@login_required(login_url="login")
+def delete_book(request, book_id):
+    book_for_delete = Book.objects.filter(id=book_id)
+    if book_for_delete.exists():
+        book_for_delete.delete()
+    return redirect("main-page")
+
+
+@login_required(login_url="login")
+def update_book(request, book_id):
+    book = Book.objects.filter(id=book_id)
+    if book.exists():
+        if request.method == "GET":
+            return render(request, "book_form.html", {"book": book.first()})
+        if request.method == "POST":
+            book.update(title=request.POST.get("title"))
+            book.update(text=request.POST.get("text"))
+            book.update(price=request.POST.get("price"))
     return redirect("main-page")

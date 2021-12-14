@@ -15,7 +15,9 @@ class Book(models.Model):
     text = models.TextField(verbose_name="Содержание")
     rate = models.ManyToManyField(User, related_name="rated_books", through="myapp.RateBookUser")
     order = models.ManyToManyField(User, related_name="ordered_books", through="myapp.OrderBookUser")
-    price = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="цена", validators=[validators.MinValueValidator(0)])
+    price = models.DecimalField(
+        max_digits=9, decimal_places=2, verbose_name="цена", validators=[validators.MinValueValidator(0)]
+        )
     country = models.ForeignKey("Country", on_delete=models.SET_DEFAULT, default=1)
 
     def __str__(self):

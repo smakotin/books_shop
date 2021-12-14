@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update book</title>
+</head>
+<body>
+    <form action="{% url 'update-book' book_id=book.id %}" method="post">
+        {% csrf_token %}
+        <label for="title">Title</label>
+        <textarea type="text" name="title" id="title" rows="1" cols="20" >{{ book.title }}</textarea>
+            <br>
+        <label for="text">Text</label>
+        <textarea type="text" name="text" id="text" rows="6" cols="40" >{{ book.text }}</textarea>
+            <br>
+        <label for="price">Price</label>
+        <textarea type="number" name="price" id="price" rows="1" cols="10" >{{ book.price }}</textarea>
+      <input type="submit" value="OK">
+    </form>
+</body>
+</html>
